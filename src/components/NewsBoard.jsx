@@ -9,15 +9,19 @@ const NewsBoard = ({ category }) => {
 
   useEffect(() => {
     const fetchNews = async () => {
-      const url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&page=${page}&pageSize=${pageSize}&apiKey=${import.meta.env.VITE_API_KEY}`;
+      
+        const url = `https://api.thenewsapi.com/v1/news/all?api_token=${
+          import.meta.env.VITE_API_KEY
+        }&categories=${category}&page=${page}&pageSize=${pageSize}`;
+        
       
       try {
         const response = await fetch(url);
         const data = await response.json();
-        setArticles(data.articles);
-        setTotalResults(data.totalResults);
+        setArticles(data.data);
+        setTotalResults(data.data.length);
       } catch (error) {
-        console.error("Error fetching news:", error);
+        console.error("Error fetching news:", error); 
       }
     };
 
@@ -46,7 +50,7 @@ const NewsBoard = ({ category }) => {
       <h2 className="text-center">Latest <span className="badge bg-danger">News</span></h2>
       <div className="news-container d-flex flex-wrap justify-content-center">
         {articles.map((news, index) => (
-          <NewsItem key={index} title={news.title} description={news.description} src={news.urlToImage} url={news.url} />
+          <NewsItem key={index} title={news.title} description={news.description} src={news.image_url} url={news.url} />
         ))}
       </div>
 
